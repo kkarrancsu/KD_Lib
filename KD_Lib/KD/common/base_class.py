@@ -6,6 +6,12 @@ import matplotlib.pyplot as plt
 from copy import deepcopy
 import os
 
+try:
+    # see: https://discuss.pytorch.org/t/error-while-multiprocessing-in-dataloader/46845/8
+    from tqdm import tqdm
+except ModuleNotFoundError:
+    def tqdm(): pass
+
 
 class BaseClass:
     """
@@ -103,7 +109,7 @@ class BaseClass:
         for ep in range(epochs):
             epoch_loss = 0.0
             correct = 0
-            for (data, label) in self.train_loader:
+            for step, (data, label) in enumerate(tqdm(self.train_loader, desc='Training teacher ...')):
                 data = data.to(self.device)
                 label = label.to(self.device)
                 out = self.teacher_model(data)
@@ -187,7 +193,7 @@ class BaseClass:
             correct = 0
             self.student_model.train()    # the call to _evaluate_model puts it in eval mode, so no training is happening!
 
-            for (data, label) in self.train_loader:
+            for step, (data, label) in enumerate(tqdm(self.train_loader, desc='Training Student ...')):
 
                 data = data.to(self.device)
                 label = label.to(self.device)
@@ -283,7 +289,7 @@ class BaseClass:
         outputs = []
 
         with torch.no_grad():
-            for data, target in self.val_loader:
+            for step, (data, target) in enumerate(tqdm(self.val_loader, desc='Validating ...')):
                 data = data.to(self.device)
                 target = target.to(self.device)
                 output = model(data)
