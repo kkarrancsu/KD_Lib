@@ -185,6 +185,7 @@ class BaseClass:
         for ep in range(epochs):
             epoch_loss = 0.0
             correct = 0
+            self.student_model.train()    # the call to _evaluate_model puts it in eval mode, so no training is happening!
 
             for (data, label) in self.train_loader:
 
