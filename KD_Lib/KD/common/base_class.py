@@ -232,6 +232,8 @@ class BaseClass:
                 )
             )
 
+            self.post_epoch_call(ep)
+
         self.student_model.load_state_dict(self.best_student_model_weights)
         if save_model:
             torch.save(self.student_model.state_dict(), save_model_pth)
