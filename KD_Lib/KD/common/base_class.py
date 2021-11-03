@@ -217,7 +217,7 @@ class BaseClass:
 
             epoch_acc = correct / length_of_dataset
 
-            _, epoch_val_acc = self._evaluate_model(self.student_model, verbose=" [Val] Student]")
+            _, epoch_val_acc = self._evaluate_model(self.student_model, verbose="Student")
 
             if epoch_val_acc > best_acc:
                 best_acc = epoch_val_acc
